@@ -2,7 +2,7 @@ import java.text.NumberFormat.Style;
 import java.util.Scanner;
 import hash.HashTable;
 
-class HelloWorld {
+class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
