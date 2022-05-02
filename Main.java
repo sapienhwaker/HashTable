@@ -1,9 +1,7 @@
-import java.text.NumberFormat.Style;
 import java.util.Scanner;
-import hash.HashTable;
 
-class Main {
-    public static void main(String[] args) {
+public class Main {
+    public static void main(String args[]){
         Scanner scanner = new Scanner(System.in);
 
         // System.out.println("Enter table size: ");
@@ -15,22 +13,8 @@ class Main {
         // System.out.println("Enter relative prime value: ");
         // int relativePrime = scanner.nextInt();
 
-        System.out.println();
+        StringHash hashTable = new StringHash(5, 5381, 33, 7);
 
-        //HashTable table = new HashTable(size, initialValue, hashMultiplier, relativePrime);
-        HashTable table = new HashTable(5, 5381, 33, 7);
-
-        // System.out.println("Select one of the followings or Q to Quit...\n");
-        // System.out.println("""
-        //         1. Search String \n
-        //         2. Add String \n
-        //         3. Remove String \n
-        //         4. Display Table \n
-        //         5. Resize Table \n
-        //         Q. Quit
-        //         """);
-
-        // System.out.println("Choice: ");
         String userInput = "0";
         userInput = userInput.trim();
         while(true){
@@ -68,24 +52,24 @@ class Main {
                 case 1: {
                     System.out.println("String to search for: ");
                     String data = scanner.next().trim();
-                    table.contains(data);
+                    hashTable.contains(data);
                     continue;
                 }
                 case 2: {
                     System.out.println("String to add: ");
                     String data = scanner.next().trim();
-                    table.add(data);
+                    hashTable.add(data);
                     continue;
                 }
                 case 3: {
                     System.out.println("String to remove: ");
                     String data = scanner.next().trim();
-                    table.remove(data);
+                    hashTable.remove(data);
                     continue;
                 }
-                case 4: table.displayTable();
+                case 4: hashTable.displayTable();
                         continue;
-                case 5: table.resize();
+                case 5: hashTable.resize();
                         continue;
                 default : break;
 

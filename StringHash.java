@@ -1,6 +1,4 @@
-package hash;
-
-public class HashTable implements StringHash{
+public class StringHash{
     int size;
     int initialValue;
     int hashMultiplier;
@@ -8,7 +6,7 @@ public class HashTable implements StringHash{
 
     String[] table;
 
-    public HashTable(int size, int initialValue, int hashMultiplier, int relativePrime){
+    public StringHash(int size, int initialValue, int hashMultiplier, int relativePrime){
         this.size = size;
         this.initialValue = initialValue;
         this.hashMultiplier = hashMultiplier;
@@ -34,15 +32,22 @@ public class HashTable implements StringHash{
     
     public boolean add(String data){
         int index = this.getIndex(data);
-        if(table[index].equals("<EMPTY>")){
+        System.out.println("Adding " + "\"" + data + "\" -> ");
+        if(table[index].equals("<EMPTY>") || table[index].equals("<REMOVED>")){
             table[index] = data;
-            System.out.println("Adding " + "\"" + data +"\" -> " + index);
+            System.out.print(index);
             return true;
         }
-        index = rehash(index, this.relativePrime);
-        if(index < 0 && index > size-1){
-            table[index] = data;
-            return true;
+
+        int i = 1;
+        while(i < size){
+            index = hasTwo(index, i++);
+            System.out.print(" -> " + index);
+            if(table[index].equals("<EMPTY>") || table[index].equals("<REMOVED>")){
+                table[index] = data;
+                //System.out.println("Adding " + "\"" + data +"\" -> " + index);
+                return true;
+            }
         }
         return false;
     }
@@ -77,27 +82,30 @@ public class HashTable implements StringHash{
     }
 
     private int getIndex(String string){
-
-        int stringHash = this.initialValue;
-        int hashMultiplier = this.hashMultiplier;
-        int prime = this.relativePrime;
-        int N = this.size;
-
+        int stringHash = initialValue;
         for(char c: string.toCharArray()){
             int character = c;
+            stringHash = initialValue;
             stringHash = (stringHash * hashMultiplier) + character;
+            System.out.println(stringHash);
         }
 
-        int index = stringHash % N;
+        int index = stringHash % size;
+
+        if(index < 0){
+            index *= -1;
+        }
 
         System.out.println("**** INDEX ****");
         System.out.println(index);
-
         return index;
     }
 
-    private int rehash(int hash1, int prime){
-        int index = prime - (hash1 % prime);
-        return index;
+    private int hasTwo(int index, int i){
+        int index1 = i*(relativePrime - (index % relativePrime));
+        index1 = (index + index1) % size;
+        System.out.println("**** SECOND INDEX ****");
+        System.out.println(index1);
+        return index1;
     }
 }
