@@ -6,6 +6,14 @@ public class Test {
         int prime = 7;
         int size = 5;
 
+        System.out.println("1. Search String \n");
+        System.out.println("2. Add String \n");
+        System.out.println("3. Remove String \n");
+        System.out.println("4. Display Table \n");
+        System.out.println("5. Resize Table \n");
+        System.out.println("Q. Quit");
+        System.out.println("Choice: ");
+
         for(String string: sampleInputs){
             getIndex(string, initialValue, hashMultiplier, prime, size);
         }
