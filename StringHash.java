@@ -20,46 +20,77 @@ public class StringHash{
     }
 
     public boolean contains(String data){
-        int index = getIndex(data);
-        if(table[index].equals("<EMPTY>") || table[index].equals("<REMOVED>")){
-            System.out.println("Searching " + "\"" + data +"\" -> " + index);
-            System.out.println("FALSE");
-            return false;
+        int i = 0;
+        int index = this.getIndex(data, 0);
+        System.out.print("Searching " + "\"" + data + "\"");
+        while(true){
+            if(i >= size){
+                System.out.println("FAILED");
+                System.out.println("\n FALSE");
+                return false;
+            }
+            if(table[index].equals("<EMPTY>")){
+                System.out.println(" -> " + index);
+                System.out.println("FAILED");
+                System.out.println("FALSE");
+                return false;
+            }
+
+            if(table[index].equals(data)){
+                System.out.println(" -> " + index);
+                System.out.println("TRUE");
+                return true;
+            }
+            
+            System.out.print(" -> " +index);
+            index = getIndex(data, ++i);
         }
-        System.out.println("TRUE");
-        return false;
     }
     
     public boolean add(String data){
-        int index = this.getIndex(data);
-        System.out.println("Adding " + "\"" + data + "\" -> ");
-        if(table[index].equals("<EMPTY>") || table[index].equals("<REMOVED>")){
-            table[index] = data;
-            System.out.print(index);
-            return true;
-        }
-
-        int i = 1;
-        while(i < size){
-            index = hasTwo(index, i++);
-            System.out.print(" -> " + index);
+        int i = 0;
+        int index = this.getIndex(data, 0);
+        System.out.print("Adding " + "\"" + data + "\"");
+        while(true){
+            if(i >= size){
+                System.out.println("FAILED");
+                return false;
+            }
             if(table[index].equals("<EMPTY>") || table[index].equals("<REMOVED>")){
                 table[index] = data;
-                //System.out.println("Adding " + "\"" + data +"\" -> " + index);
+                System.out.println(" -> " + index);
                 return true;
             }
+            System.out.print(" -> " +index);
+            index = getIndex(data, ++i);
         }
-        return false;
     }
     
     public boolean remove(String data){
-        int index = this.getIndex(data);
-        if(table[index].equals(data)){
-            table[index] = "<REMOVED>";
-            System.out.println("Removing " + "\"" + data +"\" -> " + index);
-            return true;
+        int i = 0;
+        int index = this.getIndex(data, 0);
+        System.out.print("Removing " + "\"" + data + "\"");
+        while(true){
+            if(i >= size){
+                System.out.println("\n FALSE");
+                return false;
+            }
+            if(table[index].equals("<EMPTY>") || table[index].equals("<REMOVED>")){
+                System.out.println(" -> " + index);
+                System.out.println("FALSE");
+                return false;
+            }
+
+            if(table[index].equals(data)){
+                table[index] = "<REMOVED>";
+                System.out.println(" -> " + index);
+                System.out.println("TRUE");
+                return true;
+            }
+            
+            System.out.print(" -> " +index);
+            index = getIndex(data, ++i);
         }
-        return false;
     }
     
     public void displayTable(){
@@ -70,42 +101,55 @@ public class StringHash{
     }
     
     public void resize(){
-        this.size = this.size << 1;
-        String newTable[] = new String[this.size];
-        System.out.println("NewTable size: " + newTable.length);
-        for(String eachData: this.table){
-            int index = getIndex(eachData);
-            newTable[index] = eachData;
+        int newSize = this.size << 1;
+        this.size = newSize;
+        String newTable[] = new String[newSize];
+        // System.out.println("NewTable size: " + newTable.length);
+        for(int i = 0; i < newSize; i++){
+            newTable[i] = "<EMPTY>";
+        }
+        for(String data: this.table){
+            int i = 0;
+            int index = this.getIndex(data, i);
+            System.out.print("Rehashing " + "\"" + data + "\"");
+            while(true){
+                if(i >= newSize){
+                    System.out.println("FAILED");
+                    break;
+                }
+                if(newTable[index].equals("<EMPTY>") || newTable[index].equals("<REMOVED>")){
+                    newTable[index] = data;
+                    System.out.println(" -> " + index);
+                    break;
+                }
+                System.out.print(" -> " +index);
+                index = getIndex(data, ++i);
+            }
         }
         this.table = newTable;
-        System.out.println("Updated table size: " + table.length);
+        // System.out.println("Updated table size: " + table.length);
     }
 
-    private int getIndex(String string){
-        int stringHash = initialValue;
+    private int getIndex(String string, int i){
+        // System.out.println("--- " + string + " ---");
+        int iVlaue = this.initialValue;
         for(char c: string.toCharArray()){
             int character = c;
-            stringHash = initialValue;
-            stringHash = (stringHash * hashMultiplier) + character;
-            System.out.println(stringHash);
+            iVlaue = (iVlaue * hashMultiplier) + character;
+            //System.out.println(initialValue);
         }
 
-        int index = stringHash % size;
+        int index = iVlaue % size;
 
         if(index < 0){
             index *= -1;
         }
 
-        System.out.println("**** INDEX ****");
-        System.out.println(index);
-        return index;
-    }
+        // System.out.println("Index: " + index);
 
-    private int hasTwo(int index, int i){
         int index1 = i*(relativePrime - (index % relativePrime));
         index1 = (index + index1) % size;
-        System.out.println("**** SECOND INDEX ****");
-        System.out.println(index1);
+        // System.out.println("Rehash: " + index1);
         return index1;
     }
 }

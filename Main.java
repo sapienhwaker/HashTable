@@ -1,19 +1,27 @@
+/**
+ * Name:
+ * Objective:
+ * Date:
+ */
+
 import java.util.Scanner;
 
 public class Main {
     public static void main(String args[]){
         Scanner scanner = new Scanner(System.in);
 
-        // System.out.println("Enter table size: ");
-        // int size = scanner.nextInt();
-        // System.out.println("Enter initail hash value: ");
-        // int initialValue = scanner.nextInt();
-        // System.out.println("Enter has multiplier: ");
-        // int hashMultiplier = scanner.nextInt();
-        // System.out.println("Enter relative prime value: ");
-        // int relativePrime = scanner.nextInt();
+        System.out.println("Enter table size: ");
+        int size = scanner.nextInt();
+        System.out.println("Enter initail hash value: ");
+        int initialValue = scanner.nextInt();
+        System.out.println("Enter has multiplier: ");
+        int hashMultiplier = scanner.nextInt();
+        System.out.println("Enter relative prime value: ");
+        int relativePrime = scanner.nextInt();
 
-        StringHash hashTable = new StringHash(5, 5381, 33, 7);
+        StringHash hashTable = new StringHash(size, initialValue, hashMultiplier, relativePrime);
+
+        //StringHash hashTable = new StringHash(5, 5381, 33, 7);
 
         String userInput = "0";
         userInput = userInput.trim();
@@ -30,6 +38,7 @@ public class Main {
                 """);
 
             userInput = scanner.next().trim();  //string
+            System.out.println("\n");
             if(userInput.equals("Q") || userInput.equals("q")){
                 System.out.println("Exiting the program...");
                 System.exit(0);
